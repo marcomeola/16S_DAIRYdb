@@ -1,1 +1,2 @@
-# 16s_dairydb
+# 16S_DAIRYdb
+16S_DAIRYdb
