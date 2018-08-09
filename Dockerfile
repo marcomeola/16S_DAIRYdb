@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Marco Meola (marco_meola@hotmail.com)
+MAINTAINER Marco Meola (meolam2@gmail.com)
 
 ##########
 ### System requirements
@@ -109,11 +109,11 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda clean -tipsy
 
 # set up miniconda python envs
-#ADD 16S_py35.yml /tmp/
-#ADD 16S_py27.yml /tmp/
-#RUN $CONDA_DIR/bin/conda install notebook jupyterlab widgetsnbextension jupyterhub
-#RUN $CONDA_DIR/bin/conda env create -n 16S_py35 -f /tmp/16S_py35.yml
-#RUN $CONDA_DIR/bin/conda env create -n 16S_py27 -f /tmp/16S_py27.yml
+ADD 16S_py35.yml /tmp/
+ADD 16S_py27.yml /tmp/
+RUN $CONDA_DIR/bin/conda install notebook jupyterlab widgetsnbextension jupyterhub
+RUN $CONDA_DIR/bin/conda env create -n 16S_py35 -f /tmp/16S_py35.yml
+RUN $CONDA_DIR/bin/conda env create -n 16S_py27 -f /tmp/16S_py27.yml
 
 #install non-env dependencies (what is used to launch the notebook server):
 RUN $CONDA_DIR/bin/conda clean -tipsy
@@ -136,8 +136,8 @@ RUN cd /tmp && \
     rm -rf facets
 
 #install the 3.6 and 2.7 kernels
-#RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
-#RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
+RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
+RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
 
 ##########
 ### Install Metaxa2_2.2
