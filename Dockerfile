@@ -136,8 +136,8 @@ RUN cd /tmp && \
     rm -rf facets
 
 #install the 3.6 and 2.7 kernels
-RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
-RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
+#RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
+#RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
 
 ##########
 ### Install Metaxa2_2.2
