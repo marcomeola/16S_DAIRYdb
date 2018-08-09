@@ -108,6 +108,10 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda update --all --quiet --yes && \
     $CONDA_DIR/bin/conda clean -tipsy
 
+#install the 3.6 and 2.7 kernels
+RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
+RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
+
 # set up miniconda python envs
 ADD 16S_py35.yml /tmp/
 ADD 16S_py27.yml /tmp/
@@ -135,9 +139,6 @@ RUN cd /tmp && \
     jupyter nbextension install facets-dist/ --sys-prefix && \
     rm -rf facets
 
-#install the 3.6 and 2.7 kernels
-RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
-RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
 
 ##########
 ### Install Metaxa2_2.2
