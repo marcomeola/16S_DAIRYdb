@@ -98,26 +98,45 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 ##########
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN cd /tmp && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    /bin/bash Miniconda3-latest-Linux-x86_64.sh -f -b -p$CONDA_DIR && \
-    rm Miniconda3-latest-Linux-x86_64.sh && \
-    $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
-    $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
-    $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
-    $CONDA_DIR/bin/conda update --all --quiet --yes && \
-    $CONDA_DIR/bin/conda clean -tipsy
+#RUN cd /tmp && \
+#    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+#    /bin/bash Miniconda3-latest-Linux-x86_64.sh -f -b -p$CONDA_DIR && \
+#    rm Miniconda3-latest-Linux-x86_64.sh && \
+#    $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
+#    $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
+#    $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
+#    $CONDA_DIR/bin/conda update --all --quiet --yes && \
+#    $CONDA_DIR/bin/conda clean -tipsy
 
-#install the 3.6 and 2.7 kernels
-RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
-RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
+FROM continuumio/miniconda3
+
+#install the 3.5 kernel
+ADD 16S_py35.yml /tmp/16S_py35.yml
+RUN conda env create -f /tmp/16S_py35.yml
+
+# Pull the environment name out of the 16S_py35.yml
+RUN echo "source activate $(head -1 /tmp/16S_py35.yml | cut -d' ' -f2)" > ~/.bashrc
+ENV PATH /opt/conda/envs/$(head -1 /tmp/16S_py35.yml | cut -d' ' -f2)/bin:$PATH
+
+#install the 2.7 kernel
+ADD 16S_py27.yml /tmp/16S_py27.yml
+RUN conda env create -f /tmp/16S_py27.yml
+
+# Pull the environment name out of the 16S_py27.yml
+RUN echo "source activate $(head -1 /tmp/16S_py27.yml | cut -d' ' -f2)" > ~/.bashrc
+ENV PATH /opt/conda/envs/$(head -1 /tmp/16S_py27.yml | cut -d' ' -f2)/bin:$PATH
+
+#RUN conda create -n 16S_py35 python=3.5
+#RUN conda create -n 16S_py27 python=2.7
+#RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py35 && ipython kernel install --name 16S_py35"
+#RUN /bin/bash -c "source $CONDA_DIR/bin/activate 16S_py27 && ipython kernel install --name 16S_py27"
 
 # set up miniconda python envs
-ADD 16S_py35.yml /tmp/
-ADD 16S_py27.yml /tmp/
-RUN $CONDA_DIR/bin/conda install notebook jupyterlab widgetsnbextension jupyterhub
-RUN $CONDA_DIR/bin/conda env create -n 16S_py35 -f /tmp/16S_py35.yml
-RUN $CONDA_DIR/bin/conda env create -n 16S_py27 -f /tmp/16S_py27.yml
+#ADD 16S_py35.yml /tmp/
+#ADD 16S_py27.yml /tmp/
+#RUN $CONDA_DIR/bin/conda install notebook jupyterlab widgetsnbextension jupyterhub
+#RUN $CONDA_DIR/bin/conda env create -n 16S_py35 -f /tmp/16S_py35.yml
+#RUN $CONDA_DIR/bin/conda env create -n 16S_py27 -f /tmp/16S_py27.yml
 
 #install non-env dependencies (what is used to launch the notebook server):
 RUN $CONDA_DIR/bin/conda clean -tipsy
