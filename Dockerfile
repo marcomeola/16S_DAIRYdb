@@ -109,11 +109,11 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda clean -tipsy
 
 # set up miniconda python envs
-ADD 16S_py35.yml /tmp/
-ADD 16S_py27.yml /tmp/
-RUN $CONDA_DIR/bin/conda install notebook jupyterlab widgetsnbextension jupyterhub
-RUN $CONDA_DIR/bin/conda env create -n 16S_py35 -f /tmp/16S_py35.yml
-RUN $CONDA_DIR/bin/conda env create -n 16S_py27 -f /tmp/16S_py27.yml
+#ADD 16S_py35.yml /tmp/
+#ADD 16S_py27.yml /tmp/
+#RUN $CONDA_DIR/bin/conda install notebook jupyterlab widgetsnbextension jupyterhub
+#RUN $CONDA_DIR/bin/conda env create -n 16S_py35 -f /tmp/16S_py35.yml
+#RUN $CONDA_DIR/bin/conda env create -n 16S_py27 -f /tmp/16S_py27.yml
 
 #install non-env dependencies (what is used to launch the notebook server):
 RUN $CONDA_DIR/bin/conda clean -tipsy
