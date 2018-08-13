@@ -100,31 +100,6 @@ RUN curl http://microbiology.se/sw/Metaxa2_2.2-beta10.tar.gz --output Metaxa2_2.
 RUN tar xvfz Metaxa2_2.2-beta10.tar.gz
 RUN cd Metaxa2_2.2 && ./install_metaxa2
 
-##########
-### Install SeekDeep
-##########
-
-RUN echo Europe/Berlin | sudo tee  /etc/timezone  && sudo dpkg-reconfigure --frontend noninteractive tzdata
-RUN export DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && sudo apt-get dist-upgrade -y && sudo apt-get -y autoremove
-RUN apt-get install -y build-essential software-properties-common python-software-properties
-RUN apt-get install -y git make
-
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
-RUN apt-get update && sudo apt-get install -y g++-7
-
-RUN cd ~
-RUN git clone https://github.com/bailey-lab/SeekDeep
-RUN cd SeekDeep
-
-RUN ./setup.py --libs cmake:3.7.2 --symlinkBin
-RUN echo "" >> ~/.profile && echo "#Add SeekDeep bin to your path" >> ~/.profile && echo "export PATH=\"$(pwd)/bin:\$PATH\"" >> ~/.profile
-RUN . ~/.profile
-RUN ./setup.py --addBashCompletion
-RUN ./install.sh 7
-
-#add other tools
-RUN ./setup.py --libs muscle:3.8.31 --symlinkBin --overWrite
 
 ##########
 ### Install Samtools

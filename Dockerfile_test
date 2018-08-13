@@ -104,6 +104,14 @@ RUN cd Metaxa2_2.2 && ./install_metaxa2
 ### Install SeekDeep
 ##########
 
+RUN git clone https://github.com/bailey-lab/docker-SeekDeep.git
+RUN cd docker-SeekDeep
+docker build -t seekdeep .
+#run the install script to do the actually SeekDeep install
+#for the -v option can be any given directory to store seekdeep install files
+#this prevents the docker image from getting too big
+docker run -ti --rm -v /data/docker/seekdeep/:/mnt seekdeep /root/copyfs.sh
+
 #RUN echo Europe/Berlin | sudo tee  /etc/timezone  && sudo dpkg-reconfigure --frontend noninteractive tzdata
 #RUN export DEBIAN_FRONTEND=noninteractive
 #RUN apt-get update && sudo apt-get dist-upgrade -y && sudo apt-get -y autoremove
