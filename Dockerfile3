@@ -3,6 +3,7 @@
 # See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
 # a list of version numbers.
 
+#FROM ubuntu:16.04
 FROM phusion/baseimage:0.10.1
 MAINTAINER Marco Meola (meolam2@gmail.com)
 
@@ -26,6 +27,7 @@ RUN apt-get install -y wget \
   curl \
   libpq-dev \
   build-essential \
+  apache2 \
   apt-utils \
   sudo \
   locales \
@@ -53,7 +55,7 @@ RUN apt-get install -y wget \
 
 RUN apt-get update --fix-missing
 RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
@@ -74,7 +76,9 @@ ENV PATH=$CONDA_DIR/bin:$PATH \
 ##########
 ### Install apache2
 ##########
-# RUN apt-get install -y apache2
+RUN apt-get update && \
+  apt-get install -y apache2 apache2-utils && \
+  a2enmod proxy && a2enmod proxy_http
 
 ##########
 ### expose port 80
@@ -105,6 +109,7 @@ RUN rm Metaxa2_2.2-beta10.tar.gz
 ##########
 ### Install Samtools
 ##########
+
 RUN wget https://github.com/samtools/samtools/releases/download/1.5/samtools-1.5.tar.bz2
 RUN tar -xjvf samtools-1.5.tar.bz2
 WORKDIR /build/samtools-1.5
