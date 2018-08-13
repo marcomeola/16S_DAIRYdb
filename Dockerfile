@@ -29,7 +29,6 @@ RUN apt-get install -y wget \
   build-essential \
   apache2 \
   apt-utils \
-  wget \
   sudo \
   locales \
   fonts-liberation \
@@ -102,6 +101,7 @@ RUN rm Metaxa2_2.2-beta10.tar.gz
 RUN wget https://github.com/samtools/samtools/releases/download/1.5/samtools-1.5.tar.bz2
 RUN tar -xjvf samtools-1.5.tar.bz2
 WORKDIR /build/samtools-1.5
+RUN apt-get install -y git make
 RUN make
 RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
 WORKDIR /build
