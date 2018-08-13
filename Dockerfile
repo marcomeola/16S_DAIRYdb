@@ -7,32 +7,11 @@
 FROM phusion/baseimage:0.10.1
 MAINTAINER Marco Meola (meolam2@gmail.com)
 
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
-
-##########
-### Configure environment
-##########
-RUN mkdir /build
-WORKDIR /build
-ENV BUILD /build
-ENV CONDA_DIR=/opt/conda \
-    SHELL=/bin/bash \
-    LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8
-ENV PATH=$CONDA_DIR/bin:$PATH \
-    HOME=/home/$NB_USER
-TERM=xterm
-
 ##########
 ### System requirements
 ##########
-RUN \
-  apt-get update && \
-  apt-get install -y build-essential && \
-  apt-get install -y software-properties-common && \
-  apt-get -y upgrade \
+RUN apt-get update
+RUN apt-get install -y wget \
   bzip2 \
   gcc \
   make \
@@ -47,6 +26,7 @@ RUN \
   git \
   curl \
   libpq-dev \
+  build-essential \
   apache2 \
   apt-utils \
   wget \
@@ -74,6 +54,56 @@ RUN \
   tzdata \
   gfortran
 
+RUN apt-get update --fix-missing
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
 
-  # Clean up APT when done.
-  RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+##########
+### Install apache2
+##########
+RUN apt-get update && \
+  apt-get install -y apache2 apache2-utils && \
+  a2enmod proxy && a2enmod proxy_http
+
+##########
+### expose port 80
+##########
+EXPOSE 80
+
+##########
+### Launch the webserver
+##########
+ENTRYPOINT service apache2 start && /bin/bash
+
+
+##########
+### Install Tini
+##########
+RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini && \
+    echo "1361527f39190a7338a0b434bd8c88ff7233ce7b9a4876f3315c22fce7eca1b0 *tini" | sha256sum -c - && \
+    mv tini /usr/local/bin/tini && \
+    chmod +x /usr/local/bin/tini
+
+##########
+### Install Metaxa2_2.2
+##########
+RUN curl http://microbiology.se/sw/Metaxa2_2.2-beta10.tar.gz --output Metaxa2_2.2-beta10.tar.gz
+RUN tar xvfz Metaxa2_2.2-beta10.tar.gz
+RUN cd Metaxa2_2.2 && ./install_metaxa2
+RUN rm Metaxa2_2.2-beta10.tar.gz
+
+##########
+### Install Samtools
+##########
+
+RUN wget https://github.com/samtools/samtools/releases/download/1.5/samtools-1.5.tar.bz2
+RUN tar -xjvf samtools-1.5.tar.bz2
+WORKDIR /build/samtools-1.5
+RUN make
+RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
+WORKDIR /build
+#cleanup
+RUN rm samtools-1.5.tar.bz2
