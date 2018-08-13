@@ -98,7 +98,7 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 ##########
 RUN curl http://microbiology.se/sw/Metaxa2_2.2-beta10.tar.gz --output Metaxa2_2.2-beta10.tar.gz
 RUN tar xvfz Metaxa2_2.2-beta10.tar.gz
-RUN cd Metaxa2 && ./install_metaxa2
+RUN cd Metaxa2_2.2 && ./install_metaxa2
 
 ##########
 ### Install SeekDeep
