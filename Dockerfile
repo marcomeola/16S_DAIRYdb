@@ -97,7 +97,7 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 ### Install Metaxa2_2.2
 ##########
 RUN curl http://microbiology.se/sw/Metaxa2_2.2-beta10.tar.gz --output Metaxa2_2.2-beta10.tar.gz
-RUN tar xvfz metaxa2_2.2.tar.gz
+RUN tar xvfz Metaxa2_2.2-beta10.tar.gz
 RUN cd Metaxa2 && ./install_metaxa2
 
 ##########
