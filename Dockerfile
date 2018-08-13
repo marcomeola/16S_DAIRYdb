@@ -27,7 +27,7 @@ RUN apt-get install -y wget \
   libpq-dev \
   build-essential \
   apt-utils \
-  sudo \
+   \
   locales \
   fonts-liberation \
   emacs \
@@ -49,7 +49,8 @@ RUN apt-get install -y wget \
   unzip \
   fonts-dejavu \
   tzdata \
-  gfortran
+  gfortran \
+  software-properties-common
 
 RUN apt-get update --fix-missing
 RUN apt-get clean
@@ -74,7 +75,9 @@ ENV PATH=$CONDA_DIR/bin:$PATH \
 ##########
 ### Install apache2
 ##########
-# RUN apt-get install -y apache2
+RUN apt-get update && \
+  apt-get install -y apache2 apache2-utils && \
+  a2enmod proxy && a2enmod proxy_http
 
 ##########
 ### expose port 80
@@ -113,3 +116,14 @@ RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
 WORKDIR /build
 #cleanup
 RUN rm samtools-1.5.tar.bz2
+
+##########
+### install clang and g++-5
+##########
+RUN echo "deb http://llvm.org/apt/"$(lsb_release -sc)"/ llvm-toolchain-"$(lsb_release -sc)"-3.5 main" |  tee /etc/apt/sources.list.d/llvm.list && \
+	echo "deb-src http://llvm.org/apt/"$(lsb_release -sc)"/ llvm-toolchain-"$(lsb_release -sc)"-3.5 main" |  tee -a /etc/apt/sources.list.d/llvm.list && \
+	echo "deb http://llvm.org/apt/"$(lsb_release -sc)"/ llvm-toolchain-"$(lsb_release -sc)" main" |  tee -a /etc/apt/sources.list.d/llvm.list && \
+	echo "deb-src http://llvm.org/apt/"$(lsb_release -sc)"/ llvm-toolchain-"$(lsb_release -sc)" main" |  tee -a /etc/apt/sources.list.d/llvm.list && \
+	add-apt-repository ppa:ubuntu-toolchain-r/test && \
+	wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | apt-key add - && \
+	apt-get update &&  apt-get install -y clang-3.5 libc++-dev g++-5
