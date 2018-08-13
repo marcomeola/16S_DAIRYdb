@@ -7,6 +7,9 @@
 FROM phusion/baseimage:0.10.1
 MAINTAINER Marco Meola (meolam2@gmail.com)
 
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
+
 ##########
 ### Configure environment
 ##########
@@ -70,3 +73,7 @@ RUN \
   fonts-dejavu \
   tzdata \
   gfortran
+
+
+  # Clean up APT when done.
+  RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
