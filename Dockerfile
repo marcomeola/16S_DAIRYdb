@@ -116,3 +116,16 @@ RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
 WORKDIR /build
 #cleanup
 RUN rm samtools-1.5.tar.bz2
+
+##########
+### DAIRYdb
+##########
+
+RUN git clone https://github.com/marcomeola/DAIRYdb
+RUN tar -xjvf samtools-1.5.tar.bz2
+WORKDIR /build/samtools-1.5
+RUN make
+RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
+WORKDIR /build
+#cleanup
+RUN rm samtools-1.5.tar.bz2
