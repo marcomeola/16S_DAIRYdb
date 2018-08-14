@@ -101,7 +101,7 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 ### Install Metaxa2_2.2
 ##########
 RUN curl http://microbiology.se/sw/Metaxa2_2.2-beta10.tar.gz --output Metaxa2_2.2-beta10.tar.gz
-RUN tar xvfz Metaxa2_2.2-beta10.tar.gz
+RUN tar xfz Metaxa2_2.2-beta10.tar.gz
 RUN cd Metaxa2_2.2 && ./install_metaxa2
 RUN rm Metaxa2_2.2-beta10.tar.gz
 
@@ -109,12 +109,11 @@ RUN rm Metaxa2_2.2-beta10.tar.gz
 ### Install Samtools
 ##########
 RUN wget https://github.com/samtools/samtools/releases/download/1.5/samtools-1.5.tar.bz2
-RUN tar -xjvf samtools-1.5.tar.bz2
+RUN tar -xjf samtools-1.5.tar.bz2
 WORKDIR /build/samtools-1.5
 RUN make
 RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
 WORKDIR /build
-#cleanup
 RUN rm samtools-1.5.tar.bz2
 
 ##########
@@ -122,10 +121,16 @@ RUN rm samtools-1.5.tar.bz2
 ##########
 
 RUN git clone https://github.com/marcomeola/DAIRYdb
-RUN tar -xjvf samtools-1.5.tar.bz2
-WORKDIR /build/samtools-1.5
-RUN make
-RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
-WORKDIR /build
+RUN cd /DAIRYdb/DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_Metaxa2/
+RUN tar -xfz SSU_DAIRYdb_v1.1_10290_20180806_Final_MTX.tar.gz
+#RUN mv -r SSU_DAIRYdb_v1.1_10290_20180806_Final_MTX
+RUN cd /DAIRYdb/DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_Sintax/
+RUN tar -xfz DAIRYdb_v1.1_10290_20180806_Final_STX.udb.tar.gz
+RUN cd /DAIRYdb/DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_blast/
+RUN tar -xfz DAIRYdb_v1.1_10290_20180806_Final_blast.tar.gz
+WORKDIR /build/DAIRYdb
+
+#RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
+#WORKDIR /build
 #cleanup
-RUN rm samtools-1.5.tar.bz2
+#RUN rm samtools-1.5.tar.bz2
