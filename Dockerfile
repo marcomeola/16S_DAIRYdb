@@ -121,13 +121,10 @@ RUN rm samtools-1.5.tar.bz2
 ##########
 
 RUN git clone https://github.com/marcomeola/DAIRYdb
-RUN cd /DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_Metaxa2/
-RUN tar -xfz SSU_DAIRYdb_v1.1_10290_20180806_Final_MTX.tar.gz
+RUN tar xfz DAIRYdb/DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_Metaxa2/SSU_DAIRYdb_v1.1_10290_20180806_Final_MTX.tar.gz
 #RUN mv -r SSU_DAIRYdb_v1.1_10290_20180806_Final_MTX
-RUN cd /DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_Sintax/
-RUN tar -xfz DAIRYdb_v1.1_10290_20180806_Final_STX.udb.tar.gz
-RUN cd /DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_blast/
-RUN tar -xfz DAIRYdb_v1.1_10290_20180806_Final_blast.tar.gz
+RUN tar -xfz DAIRYdb/DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_Sintax/DAIRYdb_v1.1_10290_20180806_Final_STX.udb.tar.gz
+RUN tar -xfz DAIRYdb/DAIRYdb_v1.1_20180806/DAIRYdb_v1.1_20180806_blast/DAIRYdb_v1.1_10290_20180806_Final_blast.tar.gz
 WORKDIR /build/DAIRYdb
 
 #RUN ln -s /build/samtools-1.5/samtools /usr/bin/samtools
